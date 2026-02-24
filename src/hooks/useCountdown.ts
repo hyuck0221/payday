@@ -3,6 +3,7 @@ import { Settings } from '../types/settings';
 import { CountdownState } from '../types/settings';
 import { getNextPayday, getPrevPayday } from '../utils/paydayCalculator';
 import { calculateEarned } from '../utils/earnings';
+import { getElonAmount } from '../utils/elonMode';
 
 function computeState(settings: Settings): CountdownState {
   const now = new Date();
@@ -20,8 +21,11 @@ function computeState(settings: Settings): CountdownState {
   const minutes = Math.floor((totalSec % 3600) / 60);
   const seconds = totalSec % 60;
 
-  const earned = settings.amount
-    ? calculateEarned(settings.amount, now, prevPayday, nextPayday)
+  const earnBase = settings.elonMode
+    ? getElonAmount(settings.currency, settings.payType)
+    : settings.amount;
+  const earned = earnBase
+    ? calculateEarned(earnBase, now, prevPayday, nextPayday)
     : 0;
 
   return { days, hours, minutes, seconds, totalMs, nextPayday, prevPayday, progressPercent, earned };

@@ -1,20 +1,12 @@
-import { Theme } from '../../../types/settings';
 import { CURRENCIES } from '../../../constants/currencies';
-
-const THEME_OPTIONS: { value: Theme; label: string; emoji: string }[] = [
-  { value: 'light', label: '라이트', emoji: '☀️' },
-  { value: 'dark', label: '다크', emoji: '🌙' },
-  { value: 'system', label: '시스템', emoji: '💻' },
-];
 
 interface Props {
   nickname: string | undefined;
   currency: string;
-  theme: Theme;
-  onChange: (updates: { nickname?: string; currency?: string; theme?: Theme }) => void;
+  onChange: (updates: { nickname?: string; currency?: string }) => void;
 }
 
-export function Step5Other({ nickname, currency, theme, onChange }: Props) {
+export function Step5Other({ nickname, currency, onChange }: Props) {
   return (
     <div>
       <h2 className="text-2xl font-bold text-center mb-2 text-gray-800 dark:text-slate-100">
@@ -58,27 +50,6 @@ export function Step5Other({ nickname, currency, theme, onChange }: Props) {
                 }`}
               >
                 {c.symbol} {c.code}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
-            테마
-          </label>
-          <div className="flex gap-2">
-            {THEME_OPTIONS.map((t) => (
-              <button
-                key={t.value}
-                onClick={() => onChange({ theme: t.value })}
-                className={`flex-1 py-3 rounded-2xl text-sm font-semibold transition-all ${
-                  theme === t.value
-                    ? 'bg-gradient-to-br from-pink-400 to-purple-500 text-white shadow-md'
-                    : 'bg-gray-50 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-slate-600'
-                }`}
-              >
-                {t.emoji} {t.label}
               </button>
             ))}
           </div>

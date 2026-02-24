@@ -9,7 +9,8 @@ export interface Settings {
   hour: number;             // 0-23
   minute: number;           // 0-59
   holidayRule: HolidayRule;
-  amount?: number;          // optional
+  amount?: number;          // optional, not used when elonMode is true
+  elonMode?: boolean;       // 일론 머스크 모드
   currency: string;
   nickname?: string;
   theme: Theme;

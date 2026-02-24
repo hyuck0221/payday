@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Settings, PayType, HolidayRule, Theme } from '../../types/settings';
+import { Settings, PayType, HolidayRule } from '../../types/settings';
 import { WizardProgress } from './WizardProgress';
 import { WizardNav } from './WizardNav';
 import { Step1PayType } from './steps/Step1PayType';
@@ -95,8 +95,10 @@ export function Wizard({ initialSettings, onComplete }: Props) {
         return (
           <Step4Amount
             amount={draft.amount}
+            elonMode={draft.elonMode ?? false}
             currency={draft.currency}
-            onChange={(amount) => update({ amount })}
+            onChangeAmount={(amount) => update({ amount, elonMode: false })}
+            onChangeElonMode={(elonMode) => update({ elonMode, amount: undefined })}
           />
         );
       case 4:
@@ -104,8 +106,7 @@ export function Wizard({ initialSettings, onComplete }: Props) {
           <Step5Other
             nickname={draft.nickname}
             currency={draft.currency}
-            theme={draft.theme}
-            onChange={(u: { nickname?: string; currency?: string; theme?: Theme }) => update(u)}
+            onChange={(u: { nickname?: string; currency?: string }) => update(u)}
           />
         );
       default:
@@ -148,7 +149,7 @@ export function Wizard({ initialSettings, onComplete }: Props) {
             canNext={canNext()}
             onPrev={goPrev}
             onNext={goNext}
-            onSkip={step === 3 ? () => { update({ amount: undefined }); goNext(); } : undefined}
+            onSkip={step === 3 ? () => { update({ amount: undefined, elonMode: false }); goNext(); } : undefined}
           />
         </div>
       </div>

@@ -43,7 +43,11 @@ export function encodeSettings(s: Settings): URLSearchParams {
     p.set('mn', String(s.minute));
   }
   p.set('hl', HOLIDAY_REV[s.holidayRule]);
-  if (s.amount != null) p.set('am', String(s.amount));
+  if (s.elonMode) {
+    p.set('el', '1');
+  } else if (s.amount != null) {
+    p.set('am', String(s.amount));
+  }
   p.set('cu', s.currency);
   if (s.nickname) p.set('nk', s.nickname);
   p.set('th', THEME_REV[s.theme]);
@@ -68,8 +72,9 @@ export function decodeSettings(search: string): Settings | null {
     const thRaw = p.get('th') ?? 's';
     const theme: Theme = THEME_MAP[thRaw] ?? 'system';
 
+    const elonMode = p.get('el') === '1';
     const amRaw = p.get('am');
-    const amount = amRaw ? parseFloat(amRaw) : undefined;
+    const amount = !elonMode && amRaw ? parseFloat(amRaw) : undefined;
     const currency = p.get('cu') ?? 'KRW';
     const nickname = p.get('nk') ?? undefined;
 
@@ -80,7 +85,7 @@ export function decodeSettings(search: string): Settings | null {
 
     if (isNaN(hour) || isNaN(minute) || isNaN(dayOfMonth) || isNaN(dayOfWeek)) return null;
 
-    return { payType, dayOfMonth, dayOfWeek, hour, minute, holidayRule, amount, currency, nickname, theme };
+    return { payType, dayOfMonth, dayOfWeek, hour, minute, holidayRule, amount, elonMode, currency, nickname, theme };
   } catch {
     return null;
   }
